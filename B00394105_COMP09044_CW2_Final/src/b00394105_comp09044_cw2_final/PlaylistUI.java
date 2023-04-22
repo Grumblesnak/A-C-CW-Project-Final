@@ -375,7 +375,43 @@ public class PlaylistUI extends javax.swing.JFrame {
     }//GEN-LAST:event_displaySongsBtnActionPerformed
 
     private void displaySongByBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displaySongByBtnActionPerformed
+        String ID = userIDLbl.getText();
+        Integer userID = Integer.parseInt(ID);
         
+        String userChoice = displayByCB.getSelectedItem().toString();
+        String specification;
+        LinkedList<Song> displayBySongs;
+        
+        if("title".equals(userChoice)){
+            specification = JOptionPane.showInputDialog("Enter song name to display by");
+            displayBySongs = musicList.displayByTitle(specification, userID);
+            
+            String songsText = "";
+            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("artist".equals(userChoice)){
+            specification = JOptionPane.showInputDialog("Enter artist name to display by");
+            displayBySongs = musicList.displayByArtist(specification, userID);
+            
+            String songsText = "";
+            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("genre".equals(userChoice)){
+            specification = JOptionPane.showInputDialog("Enter genre to display by");
+            displayBySongs = musicList.displayByGenre(specification, userID);
+            
+            String songsText = "";
+            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("release year".equals(userChoice)){
+            specification = JOptionPane.showInputDialog("Enter year of release to display by");
+            Integer specifiedYear = Integer.parseInt(specification);
+            displayBySongs = musicList.displayByYear(specifiedYear, userID);
+            
+            String songsText = "";
+            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        }
     }//GEN-LAST:event_displaySongByBtnActionPerformed
 
     /**

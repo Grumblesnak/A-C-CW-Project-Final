@@ -71,4 +71,52 @@ public class MusicList {
         }
         return songsList;
     }
+    
+    public LinkedList<Song> displayByTitle(String specification, Integer listID){
+        LinkedList<Song> displayBySongs = new LinkedList<>();
+        if(songs != null && songs.size() > 0){
+            for (int i = 0; i < songs.size(); i++){
+                if(songs.get(i).title.equals(specification) && songs.get(i).listID.equals(listID)){
+                    displayBySongs.add(songs.get(i));
+                }
+            }
+        }
+        return displayBySongs;
+    }
+    
+    public LinkedList<Song> displayByArtist(String specification, Integer listID){
+        LinkedList<Song> displayBySongs = new LinkedList<>();
+        if(songs != null && songs.size() > 0){
+            for (int i = 0; i < songs.size(); i++){
+                if(songs.get(i).artist.equals(specification) && songs.get(i).listID.equals(listID)){
+                    displayBySongs.add(songs.get(i));
+                }
+            }
+        }
+        return displayBySongs;
+    }
+    
+    public LinkedList<Song> displayByGenre(String specification, Integer listID){
+        LinkedList<Song> displayBySongs = new LinkedList<>();
+        if(songs != null && songs.size() > 0){
+            for (int i = 0; i < songs.size(); i++){
+                if(songs.get(i).genre.equals(specification) && songs.get(i).listID.equals(listID)){
+                    displayBySongs.add(songs.get(i));
+                }
+            }
+        }
+        return displayBySongs;
+    }
+    
+    public LinkedList<Song> displayByYear(Integer specification, Integer listID){
+        LinkedList<Song> displayBySongs = new LinkedList<>();
+        if(songs != null && songs.size() > 0){
+            for (int i = 0; i < songs.size(); i++){
+                if(songs.get(i).releaseYear.equals(specification) && songs.get(i).listID.equals(listID)){
+                    displayBySongs.add(songs.get(i));
+                }
+            }
+        }
+        return displayBySongs;
+    }
 }
