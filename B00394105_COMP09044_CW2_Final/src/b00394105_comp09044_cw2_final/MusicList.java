@@ -76,7 +76,7 @@ public class MusicList {
         LinkedList<Song> displayBySongs = new LinkedList<>();
         if(songs != null && songs.size() > 0){
             for (int i = 0; i < songs.size(); i++){
-                if(songs.get(i).title.equals(specification) && songs.get(i).listID.equals(listID)){
+                if(songs.get(i).title.contains(specification) && songs.get(i).listID.equals(listID)){
                     displayBySongs.add(songs.get(i));
                 }
             }
@@ -88,7 +88,7 @@ public class MusicList {
         LinkedList<Song> displayBySongs = new LinkedList<>();
         if(songs != null && songs.size() > 0){
             for (int i = 0; i < songs.size(); i++){
-                if(songs.get(i).artist.equals(specification) && songs.get(i).listID.equals(listID)){
+                if(songs.get(i).artist.contains(specification) && songs.get(i).listID.equals(listID)){
                     displayBySongs.add(songs.get(i));
                 }
             }
@@ -100,7 +100,7 @@ public class MusicList {
         LinkedList<Song> displayBySongs = new LinkedList<>();
         if(songs != null && songs.size() > 0){
             for (int i = 0; i < songs.size(); i++){
-                if(songs.get(i).genre.equals(specification) && songs.get(i).listID.equals(listID)){
+                if(songs.get(i).genre.contains(specification) && songs.get(i).listID.equals(listID)){
                     displayBySongs.add(songs.get(i));
                 }
             }
