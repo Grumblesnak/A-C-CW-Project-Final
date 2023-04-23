@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 public class PlaylistUI extends javax.swing.JFrame {
     UserList userList = UserListSingleton.getInstance().getUserList();
     MusicList musicList = MusicListSingleton.getInstance().getMusicList();
+    CollectionList collectionList = CollectionListSingleton.getInstance().getCollectionList();
 
     /**
      * Creates new form PlaylistUI
@@ -38,6 +39,10 @@ public class PlaylistUI extends javax.swing.JFrame {
         displaySongsBtn = new javax.swing.JButton();
         displaySongByBtn = new javax.swing.JButton();
         displayByCB = new javax.swing.JComboBox<>();
+        createCollectionBtn = new javax.swing.JButton();
+        addToCollectionBtn = new javax.swing.JButton();
+        sortSongByBtn = new javax.swing.JButton();
+        sortByCB = new javax.swing.JComboBox<>();
         exitPanel = new javax.swing.JPanel();
         signOutBtn = new javax.swing.JButton();
         quitBtn = new javax.swing.JButton();
@@ -144,7 +149,35 @@ public class PlaylistUI extends javax.swing.JFrame {
         });
 
         displayByCB.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        displayByCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "title", "artist", "genre", "release year" }));
+        displayByCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "title", "artist", "genre", "release year", "collection" }));
+
+        createCollectionBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        createCollectionBtn.setText("Create Collection");
+        createCollectionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createCollectionBtnActionPerformed(evt);
+            }
+        });
+
+        addToCollectionBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        addToCollectionBtn.setText("Add To Collection");
+        addToCollectionBtn.setActionCommand("Add to Collection");
+        addToCollectionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToCollectionBtnActionPerformed(evt);
+            }
+        });
+
+        sortSongByBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        sortSongByBtn.setText("Sort Songs By");
+        sortSongByBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortSongByBtnActionPerformed(evt);
+            }
+        });
+
+        sortByCB.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        sortByCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ascending", "descending" }));
 
         javax.swing.GroupLayout songsPanelLayout = new javax.swing.GroupLayout(songsPanel);
         songsPanel.setLayout(songsPanelLayout);
@@ -154,24 +187,29 @@ public class PlaylistUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(songsPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(displaySongByBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                            .addComponent(displayByCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(displayByCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(displaySongsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sortSongByBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                            .addComponent(sortByCB, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(songsPanelLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(addSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(updateSongBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(songsPanelLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(addSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(updateSongBtn)
+                                .addGap(18, 18, 18)
+                                .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(songsPanelLayout.createSequentialGroup()
+                                .addComponent(createCollectionBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(addToCollectionBtn)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(songsPanelLayout.createSequentialGroup()
-                .addGap(134, 134, 134)
-                .addComponent(displaySongsBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         songsPanelLayout.setVerticalGroup(
             songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,14 +220,22 @@ public class PlaylistUI extends javax.swing.JFrame {
                     .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(updateSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(songsPanelLayout.createSequentialGroup()
                         .addComponent(displaySongByBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(displayByCB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(displayByCB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sortSongByBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sortByCB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(displaySongsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(displaySongsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addToCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -296,6 +342,12 @@ public class PlaylistUI extends javax.swing.JFrame {
             
             musicList.addSong(title, artist, genre, releaseYear, songID, listID);
             JOptionPane.showMessageDialog(this, "Song Added...");
+            
+            LinkedList<Song> songsList = musicList.displaySongs(listID);
+        
+            String songsText = "";
+            songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
         }
     }//GEN-LAST:event_addSongBtnActionPerformed
 
@@ -311,6 +363,12 @@ public class PlaylistUI extends javax.swing.JFrame {
                 if(response == JOptionPane.YES_OPTION){
                     musicList.deleteSong(title, artist, userID);
                     JOptionPane.showMessageDialog(this, "Song Deleted...");
+                    
+                    LinkedList<Song> songsList = musicList.displaySongs(userID);
+        
+                    String songsText = "";
+                    songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                    songsTextArea.setText(songsText);
                 } else if (response == JOptionPane.NO_OPTION){
                     JOptionPane.showMessageDialog(this, "Cancelling Deletion...");
                 }
@@ -326,18 +384,25 @@ public class PlaylistUI extends javax.swing.JFrame {
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
-        String title = JOptionPane.showInputDialog("Enter song name");
+        String title = JOptionPane.showInputDialog("Enter song to be updated");
         if(musicList.checkSongTitle(title, userID) == true){
-            String artist = JOptionPane.showInputDialog("Enter artist name");
+            String artist = JOptionPane.showInputDialog("Enter songs artist");
             if(musicList.checkArtist(artist, userID) == true){
+                Integer songID = musicList.getSongID(title, artist, userID);
                 title = JOptionPane.showInputDialog("Enter updated song name");
                 artist = JOptionPane.showInputDialog("Enter updated artist name");
                 String genre = JOptionPane.showInputDialog("Enter updated song genre");
                 String inputYear = JOptionPane.showInputDialog("Enter updated song release year");
                 Integer releaseYear = Integer.parseInt(inputYear);
                 
-                musicList.updateSong(title, artist, genre, releaseYear, userID);
+                musicList.updateSong(title, artist, genre, releaseYear, userID, songID);
                 JOptionPane.showMessageDialog(this, "Song Updated...");
+                
+                LinkedList<Song> songsList = musicList.displaySongs(userID);
+
+                String songsText = "";
+                songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
             } else {
                 JOptionPane.showMessageDialog(this, "No matching artist for that song...");
             }
@@ -411,8 +476,108 @@ public class PlaylistUI extends javax.swing.JFrame {
             String songsText = "";
             songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
             songsTextArea.setText(songsText);
+        } else if("collection".equals(userChoice)){
+            specification = JOptionPane.showInputDialog("Enter collection name to display by");
+            Integer collectionID = collectionList.getCollectionID(specification, userID);
+            displayBySongs = musicList.displayByCollection(specification, userID, collectionID);
+            
+            String songsText = "";
+            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
         }
     }//GEN-LAST:event_displaySongByBtnActionPerformed
+
+    private void createCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createCollectionBtnActionPerformed
+        String userID = userIDLbl.getText();
+        Integer listID = Integer.parseInt(userID);
+        
+        String collectionName = JOptionPane.showInputDialog("Enter Collection Name");
+        if(collectionList.checkCollectionName(collectionName, listID) == true){
+            JOptionPane.showMessageDialog(this, "Collection already exists...");
+        } else {
+            Integer collectionID = collectionList.getCount();
+            String title = JOptionPane.showInputDialog("Enter song name for initial collection");
+            if(musicList.checkSongTitle(title, listID) == true){
+                String artist = JOptionPane.showInputDialog("Enter artist name for initial collection");
+                if(musicList.checkArtist(artist, listID) == true){
+                    Song song = musicList.getSongByID(title, artist,listID);
+                    collectionList.createCollection(collectionName, collectionID, listID, null, song);
+                    JOptionPane.showMessageDialog(this, "New collection made...");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No matching artist for that song...");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No song with that title...");
+            }
+        }
+    }//GEN-LAST:event_createCollectionBtnActionPerformed
+
+    private void addToCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToCollectionBtnActionPerformed
+        String userID = userIDLbl.getText();
+        Integer listID = Integer.parseInt(userID);
+        
+        String collectionName = JOptionPane.showInputDialog("Enter Collection Name to add to");
+        Integer collectionID = collectionList.getCollectionID(collectionName, listID);
+        if(collectionList.checkCollectionName(collectionName, listID) == true){
+            String title = JOptionPane.showInputDialog("Enter song to add to collection");
+            if(musicList.checkSongTitle(title, listID) == true){
+                String artist = JOptionPane.showInputDialog("Enter the songs artist");
+                if(musicList.checkArtist(artist, listID) == true){
+                    Song newSongs = musicList.getSongByID(title, artist, listID);
+                    collectionList.addSongToCollection(collectionID, newSongs);
+                    JOptionPane.showMessageDialog(this, "Song added to Collection...");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No matching artist for that song...");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No song with that title...");
+            }
+        } else {
+            JOptionPane.showInputDialog("No Collection with that name...");
+        }
+    }//GEN-LAST:event_addToCollectionBtnActionPerformed
+
+    private void sortSongByBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortSongByBtnActionPerformed
+        String ID = userIDLbl.getText();
+        Integer userID = Integer.parseInt(ID);
+        
+        String sortBy = displayByCB.getSelectedItem().toString();
+        String sortChoice = sortByCB.getSelectedItem().toString();
+        LinkedList<Song> sortBySongs;
+        
+        if("title".equals(sortBy)){
+            sortBySongs = musicList.sortByTitle(sortChoice, userID);
+            
+            String songsText = "";
+            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("artist".equals(sortBy)){
+            sortBySongs = musicList.sortByArtist(sortChoice, userID);
+            
+            String songsText = "";
+            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("genre".equals(sortBy)){
+            sortBySongs = musicList.sortByGenre(sortChoice, userID);
+            
+            String songsText = "";
+            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("release year".equals(sortBy)){
+            sortBySongs = musicList.sortByYear(sortChoice, userID);
+            
+            String songsText = "";
+            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else if("collection".equals(sortBy)){
+            JOptionPane.showInputDialog("Currently unavailable...");
+//            sortBySongs = musicList.sortByCollection(sortChoice, userID);
+//            
+//            String songsText = "";
+//            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+//            songsTextArea.setText(songsText);
+        }
+    }//GEN-LAST:event_sortSongByBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,6 +616,8 @@ public class PlaylistUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addSongBtn;
+    private javax.swing.JButton addToCollectionBtn;
+    private javax.swing.JButton createCollectionBtn;
     private javax.swing.JLabel currentIDLbl;
     private javax.swing.JLabel currentUserLbl;
     private javax.swing.JButton deleteSongBtn;
@@ -465,6 +632,8 @@ public class PlaylistUI extends javax.swing.JFrame {
     private javax.swing.JButton signOutBtn;
     private javax.swing.JPanel songsPanel;
     private javax.swing.JTextArea songsTextArea;
+    private javax.swing.JComboBox<String> sortByCB;
+    private javax.swing.JButton sortSongByBtn;
     private javax.swing.JLabel titleLbl;
     private javax.swing.JButton updateSongBtn;
     public javax.swing.JLabel userIDLbl;
