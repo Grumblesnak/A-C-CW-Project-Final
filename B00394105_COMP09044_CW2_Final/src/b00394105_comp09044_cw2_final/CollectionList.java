@@ -54,6 +54,24 @@ public class CollectionList {
         }
     }
     
+    public void removeSongFromCollection(Integer collectionID, Integer songID, Integer userID){
+        for(int i = 0; i < collections.size(); i++){
+            if(collections.get(i).collectionID.equals(collectionID)){
+                if(collections.get(i).collectionSongs.get(i).songID.equals(songID) && collections.get(i).collectionSongs.get(i).listID.equals(userID)){
+                    collections.get(i).collectionSongs.remove(i);
+                }
+            }
+        }
+    }
+    
+    public void deleteCollection(Integer collectionID, Integer userID){
+        for(int i = 0; i< collections.size(); i++){
+            if(collections.get(i).userID.equals(userID) && collections.get(i).collectionID.equals(collectionID)){
+                collections.remove(i);
+            }
+        }
+    }
+    
     public boolean checkCollectionName(String collectionName, Integer userID){
         boolean collectionExists = false;
         for(int i = 0; i < collections.size(); i++){

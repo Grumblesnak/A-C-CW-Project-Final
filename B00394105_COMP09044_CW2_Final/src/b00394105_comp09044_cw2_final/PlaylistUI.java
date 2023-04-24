@@ -43,6 +43,8 @@ public class PlaylistUI extends javax.swing.JFrame {
         addToCollectionBtn = new javax.swing.JButton();
         sortSongByBtn = new javax.swing.JButton();
         sortByCB = new javax.swing.JComboBox<>();
+        removeFromCollectionBtn = new javax.swing.JButton();
+        deleteCollectionBtn = new javax.swing.JButton();
         exitPanel = new javax.swing.JPanel();
         signOutBtn = new javax.swing.JButton();
         quitBtn = new javax.swing.JButton();
@@ -72,7 +74,7 @@ public class PlaylistUI extends javax.swing.JFrame {
         headerPanelLayout.setHorizontalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerPanelLayout.createSequentialGroup()
-                .addGap(146, 146, 146)
+                .addGap(194, 194, 194)
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headerPanelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -179,6 +181,24 @@ public class PlaylistUI extends javax.swing.JFrame {
         sortByCB.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
         sortByCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ascending", "descending" }));
 
+        removeFromCollectionBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        removeFromCollectionBtn.setText("Remove from Collection");
+        removeFromCollectionBtn.setActionCommand("Add to Collection");
+        removeFromCollectionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeFromCollectionBtnActionPerformed(evt);
+            }
+        });
+
+        deleteCollectionBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        deleteCollectionBtn.setText("Delete Collection");
+        deleteCollectionBtn.setActionCommand("Add to Collection");
+        deleteCollectionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteCollectionBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout songsPanelLayout = new javax.swing.GroupLayout(songsPanel);
         songsPanel.setLayout(songsPanelLayout);
         songsPanelLayout.setHorizontalGroup(
@@ -187,29 +207,32 @@ public class PlaylistUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(songsPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(displaySongByBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                            .addComponent(displayByCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(displaySongsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sortSongByBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                            .addComponent(sortByCB, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(sortByCB, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sortSongByBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(displayByCB, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(displaySongByBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(displaySongsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(songsPanelLayout.createSequentialGroup()
-                        .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(songsPanelLayout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(addSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(updateSongBtn)
-                                .addGap(18, 18, 18)
-                                .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(songsPanelLayout.createSequentialGroup()
-                                .addComponent(createCollectionBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(addToCollectionBtn)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(createCollectionBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addToCollectionBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeFromCollectionBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteCollectionBtn)
+                        .addGap(0, 124, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(songsPanelLayout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(addSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(updateSongBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         songsPanelLayout.setVerticalGroup(
             songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,8 +243,7 @@ public class PlaylistUI extends javax.swing.JFrame {
                     .addComponent(deleteSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(updateSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(songsPanelLayout.createSequentialGroup()
                         .addComponent(displaySongByBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,11 +253,14 @@ public class PlaylistUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sortByCB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
-                        .addComponent(displaySongsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(displaySongsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(songsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addToCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(addToCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(removeFromCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteCollectionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -270,7 +295,7 @@ public class PlaylistUI extends javax.swing.JFrame {
         exitPanelLayout.setHorizontalGroup(
             exitPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(exitPanelLayout.createSequentialGroup()
-                .addGap(87, 87, 87)
+                .addGap(137, 137, 137)
                 .addComponent(signOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deleteUserBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -533,7 +558,7 @@ public class PlaylistUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No song with that title...");
             }
         } else {
-            JOptionPane.showInputDialog("No Collection with that name...");
+            JOptionPane.showMessageDialog(this, "No Collection with that name...");
         }
     }//GEN-LAST:event_addToCollectionBtnActionPerformed
 
@@ -579,6 +604,49 @@ public class PlaylistUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sortSongByBtnActionPerformed
 
+    private void removeFromCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromCollectionBtnActionPerformed
+        String userID = userIDLbl.getText();
+        Integer listID = Integer.parseInt(userID);
+        
+        String collectionName = JOptionPane.showInputDialog("Enter Collection Name to add to");
+        Integer collectionID = collectionList.getCollectionID(collectionName, listID);
+        if(collectionList.checkCollectionName(collectionName, listID) == true){
+            String title = JOptionPane.showInputDialog("Enter song to add to collection");
+            if(musicList.checkSongTitle(title, listID) == true){
+                String artist = JOptionPane.showInputDialog("Enter the songs artist");
+                if(musicList.checkArtist(artist, listID) == true){
+                    Integer songID = musicList.getSongID(title, artist, listID);
+                    collectionList.removeSongFromCollection(collectionID, songID, listID);
+                    JOptionPane.showMessageDialog(this, "Song removed from Collection...");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No matching artist for that song...");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No song with that title...");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No Collection with that name...");
+        }
+    }//GEN-LAST:event_removeFromCollectionBtnActionPerformed
+
+    private void deleteCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCollectionBtnActionPerformed
+        String userID = userIDLbl.getText();
+        Integer listID = Integer.parseInt(userID);
+        
+        String collectionName = JOptionPane.showInputDialog("Enter Collection Name to Delete");
+        Integer collectionID = collectionList.getCollectionID(collectionName, listID);
+        if(collectionList.checkCollectionName(collectionName, listID) == true){
+            int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this collection?");
+                if(response == JOptionPane.YES_OPTION){
+                    collectionList.deleteCollection(collectionID, listID);
+                } else if (response == JOptionPane.NO_OPTION){
+                    JOptionPane.showMessageDialog(this, "Cancelling Deletion...");
+                }
+        } else {
+            JOptionPane.showMessageDialog(this, "No Collection with that name...");
+        }
+    }//GEN-LAST:event_deleteCollectionBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -620,6 +688,7 @@ public class PlaylistUI extends javax.swing.JFrame {
     private javax.swing.JButton createCollectionBtn;
     private javax.swing.JLabel currentIDLbl;
     private javax.swing.JLabel currentUserLbl;
+    private javax.swing.JButton deleteCollectionBtn;
     private javax.swing.JButton deleteSongBtn;
     private javax.swing.JButton deleteUserBtn;
     private javax.swing.JComboBox<String> displayByCB;
@@ -629,6 +698,7 @@ public class PlaylistUI extends javax.swing.JFrame {
     private javax.swing.JPanel headerPanel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton quitBtn;
+    private javax.swing.JButton removeFromCollectionBtn;
     private javax.swing.JButton signOutBtn;
     private javax.swing.JPanel songsPanel;
     private javax.swing.JTextArea songsTextArea;
