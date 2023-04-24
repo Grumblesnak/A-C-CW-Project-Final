@@ -3,6 +3,7 @@ package b00394105_comp09044_cw2_final;
 import javax.swing.JOptionPane;
 
 public class RegisterUI extends javax.swing.JFrame {
+    // Singleton is passed for the UserList to ensure sync
     UserList userList = UserListSingleton.getInstance().getUserList();
 
     /**
@@ -141,16 +142,22 @@ public class RegisterUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
+        // Will quit program when pressed
         System.exit(0);
     }//GEN-LAST:event_quitBtnActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        // When pressed, will make the LogInUI GUI visible and RegisterUI invisible
         LogInUI logInUI = new LogInUI();
         logInUI.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void newAccountBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccountBtnActionPerformed
+        // the new users username and password will be taken from the text fields
+        // the users admin status will be taken from the combo-box then turned into a boolean to be passed properly
+        // the users userID and listID (essentially the same at this point) will be made from the current number of users
+        // (first user will be 0, since there is no users. Then the next will be 1 and so forth)
         String newUsername = newUsernameFld.getText();
         String newPassword = newPasswordFld.getText();
         String getAdmin = adminCB.getSelectedItem().toString();
@@ -158,17 +165,24 @@ public class RegisterUI extends javax.swing.JFrame {
         Integer newUserID = userList.checkCount();
         Integer newListID = userList.checkCount();
         
+        // Check is made if the username in the text field already exists
         userList.checkUser(newUsername);
         if(userList.checkUser(newUsername) == true){
+            // If they do exist then a message is displayed and nothing else happens
             JOptionPane.showMessageDialog(this, "Username is already taken...");
         } else {
+            // Otherwise the information for the new user will be passed to the UserList addUser method
             userList.addUser(newUsername, newPassword, newUserID, newListID, newAdmin);
             if(newAdmin == true){
+                // If the user selected to be an admin then a unique message will be displayed
+                // User will then be returned to the LogInUI
                 JOptionPane.showMessageDialog(this, "New Admin added...");
                 LogInUI logInUI = new LogInUI();
                 logInUI.setVisible(true);
                 this.setVisible(false);
             } else if (newAdmin == false) {
+                // If the user did not select to be an admin then a unique message will be displayed
+                // User will then be returned to the LogInUI
                 JOptionPane.showMessageDialog(this, "New User added...");
                 LogInUI logInUI = new LogInUI();
                 logInUI.setVisible(true);

@@ -3,6 +3,7 @@ package b00394105_comp09044_cw2_final;
 import javax.swing.JOptionPane;
 
 public class LogInUI extends javax.swing.JFrame {
+    // Singleton is passed for the UserList to ensure sync
     UserList userList = UserListSingleton.getInstance().getUserList();
 
     /**
@@ -122,16 +123,22 @@ public class LogInUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
+        // Will quit program when pressed
         System.exit(0);
     }//GEN-LAST:event_quitBtnActionPerformed
 
     private void signInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBtnActionPerformed
+        // username and password will be read in from the text fields
+        // checks will be made for the username and password and if they exist/match
         String username = usernameFld.getText();
         userList.checkUser(username);
         if(userList.checkUser(username) == true){
             String password = passwordFld.getText();
             userList.checkPassword(username, password);
             if(userList.checkPassword(username, password) == true){
+                // If all checks return true then the users name and ID will be passed to the PlaylistUI for display
+                // Their userID will also be retrieved to identify who's list will be accessable (and not display songs from others)
+                // Then the LogInUI GUI will be hidden and the PlaylistUI will be made visible
                 PlaylistUI playlistUI = new PlaylistUI();
                 
                 String userID = userList.getListID(username, password).toString();
@@ -142,14 +149,17 @@ public class LogInUI extends javax.swing.JFrame {
                 playlistUI.setVisible(true);
                 this.setVisible(false);
             } else {
+                // if the password does not match then display message
                 JOptionPane.showMessageDialog(this, "Incorrect password...");
             }
         } else {
+            // if user could not be found then display message
             JOptionPane.showMessageDialog(this, "No Existing User with that name...");
         }
     }//GEN-LAST:event_signInBtnActionPerformed
 
     private void signUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBtnActionPerformed
+        // When pressed, the RegisterUI GUI will be made visible and the LogInUI made invisible
         RegisterUI registerUI = new RegisterUI();
         registerUI.setVisible(true);
         this.setVisible(false);

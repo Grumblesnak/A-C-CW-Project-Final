@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 public class PlaylistUI extends javax.swing.JFrame {
+    // Singletons are passed for the UserList, MusicList, and CollectionList to ensure sync on all three
     UserList userList = UserListSingleton.getInstance().getUserList();
     MusicList musicList = MusicListSingleton.getInstance().getMusicList();
     CollectionList collectionList = CollectionListSingleton.getInstance().getCollectionList();
@@ -358,54 +359,71 @@ public class PlaylistUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void signOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutBtnActionPerformed
+        // When pressed, will make the LogInUI GUI visible and PlaylistUI invisible
         LogInUI loginUI = new LogInUI();
         loginUI.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_signOutBtnActionPerformed
 
     private void quitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitBtnActionPerformed
+        // Will quit program when pressed
         System.exit(0);
     }//GEN-LAST:event_quitBtnActionPerformed
 
     private void addSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSongBtnActionPerformed
+        // songID and userID are set from a method and a text box to help identify the user and song in methods
         Integer songID = musicList.getCount();
         String userID = userIDLbl.getText();
         Integer listID = Integer.parseInt(userID);
         
+        // User is prompted to enter a song name and artist to add
         String title = JOptionPane.showInputDialog("Enter song name");
         String artist = JOptionPane.showInputDialog("Enter artist name");
+        // The title and artist are checked, if both already exist for that user then a message is displayed
         if(musicList.checkSongTitle(title, listID) == true && musicList.checkArtist(artist, listID) == true){
             JOptionPane.showMessageDialog(this, "This song by this artist is already in your list...");
         } else {
+            // Otherwise they are prompted for the remaining information needed for a song
             String genre = JOptionPane.showInputDialog("Enter song genre");
             String inputYear = JOptionPane.showInputDialog("Enter song release year");
+            // Input check ensures that the input year is an integer
             if(inputYear.matches("\\d+")){
+                // If valid then the integer is parsed
                 Integer releaseYear = Integer.parseInt(inputYear);
                 
+                // addSong is called in MusicList with the new node information and a message for confirmation is displayed
                 musicList.addSong(title, artist, genre, releaseYear, songID, listID);
                 JOptionPane.showMessageDialog(this, "Song Added...");
 
+                // The text box is then made to display the users song list
                 LinkedList<Song> songsList = musicList.displaySongs(listID);
 
                 String songsText = "";
                 songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                 songsTextArea.setText(songsText);
             } else {
+                // if year is invalid then display a message
                 JOptionPane.showMessageDialog(this, "Invalid Year...");
             }
         }
     }//GEN-LAST:event_addSongBtnActionPerformed
 
     private void deleteSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSongBtnActionPerformed
+        // userID is set from the text box and parsed as an integer, set from sign in, to help identify the user in methods
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // User is prompted to identify the song they want to delete with a song title and its artist
+        // Two checks are made for both the input title and artist
         String title = JOptionPane.showInputDialog("Enter song name");
         if(musicList.checkSongTitle(title, userID) == true){
             String artist = JOptionPane.showInputDialog("Enter artist name");
             if(musicList.checkArtist(artist, userID) == true){
+                // if both exist then they are presented with a yes/no prompt to confirm deletion
                 int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this song?");
                 if(response == JOptionPane.YES_OPTION){
+                    // Selecting yes will delete the song by calling the appropriate method, and display a message
+                    // Then the text box will be displayed with the updated list
                     musicList.deleteSong(title, artist, userID);
                     JOptionPane.showMessageDialog(this, "Song Deleted...");
                     
@@ -415,30 +433,40 @@ public class PlaylistUI extends javax.swing.JFrame {
                     songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                     songsTextArea.setText(songsText);
                 } else if (response == JOptionPane.NO_OPTION){
+                    // Selecting no will display a message and not delete any song
                     JOptionPane.showMessageDialog(this, "Cancelling Deletion...");
                 }
             } else {
+                // if the input song does not have a matching artist then a message is displayed
                 JOptionPane.showMessageDialog(this, "No matching artist for that song...");
             }
         } else {
+            // if no song is found with the input title then a message is displayed
             JOptionPane.showMessageDialog(this, "No song with that title...");
         }
     }//GEN-LAST:event_deleteSongBtnActionPerformed
 
     private void updateSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateSongBtnActionPerformed
+        // userID is set from the text box and parsed as an integer, set from sign in, to help identify the user in methods
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // User is prompted to identify the song they want to update with a song title and its artist
+        // Two checks are made for both the input title and artist
         String title = JOptionPane.showInputDialog("Enter song to be updated");
         if(musicList.checkSongTitle(title, userID) == true){
             String artist = JOptionPane.showInputDialog("Enter songs artist");
             if(musicList.checkArtist(artist, userID) == true){
+                // if both exist then the songID is retrieved and they are presented with the inputs for the new information
                 Integer songID = musicList.getSongID(title, artist, userID);
                 title = JOptionPane.showInputDialog("Enter updated song name");
                 artist = JOptionPane.showInputDialog("Enter updated artist name");
                 String genre = JOptionPane.showInputDialog("Enter updated song genre");
                 String inputYear = JOptionPane.showInputDialog("Enter updated song release year");
+                // Check is once again made for the input year
                 if(inputYear.matches("\\d+")){
+                    // if year is valid then it will be parsed as an integer and passed along with the rest of the information
+                    // A message will be displayed and the text box will display the users complete list with updated information
                     Integer releaseYear = Integer.parseInt(inputYear);
                 
                     musicList.updateSong(title, artist, genre, releaseYear, userID, songID);
@@ -450,37 +478,47 @@ public class PlaylistUI extends javax.swing.JFrame {
                     songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                     songsTextArea.setText(songsText);
                 } else {
+                    // if year is invalid then display a message
                     JOptionPane.showMessageDialog(this, "Invalid Year...");
                 }
             } else {
+                // if the input song does not have a matching artist then a message is displayed
                 JOptionPane.showMessageDialog(this, "No matching artist for that song...");
             }
         } else {
+            // if no song is found with the input title then a message is displayed
             JOptionPane.showMessageDialog(this, "No song with that title...");
         }
     }//GEN-LAST:event_updateSongBtnActionPerformed
 
     private void deleteUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUserBtnActionPerformed
+        // username and userID are set from the text boxes, set from sign in, to help identify them in methods
         String username = userNameLbl.getText();
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // User will be prompted with a yes/no option to delete their account
         int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?");
         if(response == JOptionPane.YES_OPTION){
+            // If yes is selected then the current user will be deleted and a confirmation message displayed
+            // The GUI will then return to the Log In screen
             userList.deleteUser(username, userID);
             JOptionPane.showMessageDialog(this, "Account deleted...");
             LogInUI loginUI = new LogInUI();
             loginUI.setVisible(true);
             this.setVisible(false);
         } else if (response == JOptionPane.NO_OPTION){
+            // If no is selected then a message will be displayed
             JOptionPane.showMessageDialog(this, "Account deletion cancelled...");
         }
     }//GEN-LAST:event_deleteUserBtnActionPerformed
 
     private void displaySongsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displaySongsBtnActionPerformed
+        // userID is set from the text box and parsed as an integer, set from sign in, to help identify the user in methods
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // Will simply display all songs in the specific users playlist in the text box
         LinkedList<Song> songsList = musicList.displaySongs(userID);
         
         String songsText = "";
@@ -489,21 +527,31 @@ public class PlaylistUI extends javax.swing.JFrame {
     }//GEN-LAST:event_displaySongsBtnActionPerformed
 
     private void displaySongByBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displaySongByBtnActionPerformed
+        // userID is set from the text box and parsed as an integer, set from sign in, to help identify the user in methods
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // The users combo-box selection will be used to determine what songs are displayed alongside the specification input
+        // A new list is made for displaying the songs
         String userChoice = displayByCB.getSelectedItem().toString();
         String specification;
         LinkedList<Song> displayBySongs;
         
+        // Switch case for the combo-box options
         if(null != userChoice)switch (userChoice) {
+            // If the combo-box is set to title
             case "title" -> {
+                // User is prompted for a specification that is then passed onto the specific method
+                // Specification can be either a whole word (like a search) or a sequence of letters/single word
+                // displayBySongs is used to hold the returning list of songs following the specification
+                // displayBySongs is then put into the text box
                 specification = JOptionPane.showInputDialog("Enter song name to display by");
                 displayBySongs = musicList.displayByTitle(specification, userID);
                 String songsText = "";
                 songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                 songsTextArea.setText(songsText);
                 }
+            // If the combo-box is set to artist
             case "artist" -> {
                 specification = JOptionPane.showInputDialog("Enter artist name to display by");
                 displayBySongs = musicList.displayByArtist(specification, userID);
@@ -511,6 +559,7 @@ public class PlaylistUI extends javax.swing.JFrame {
                 songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                 songsTextArea.setText(songsText);
                 }
+            // If the combo-box is set to genre
             case "genre" -> {
                 specification = JOptionPane.showInputDialog("Enter genre to display by");
                 displayBySongs = musicList.displayByGenre(specification, userID);
@@ -518,7 +567,10 @@ public class PlaylistUI extends javax.swing.JFrame {
                 songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                 songsTextArea.setText(songsText);
                 }
+            // If the combo-box is set to release year
             case "release year" -> {
+                // Same input request as other cases, but has to be a specific year, cant have just 20 and get everything 2000+
+                // Also contains the usual integer check for a year
                 specification = JOptionPane.showInputDialog("Enter year of release to display by");
                 if(specification.matches("\\d+")){
                     Integer specifiedYear = Integer.parseInt(specification);
@@ -530,7 +582,10 @@ public class PlaylistUI extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Invalid Year...");
                 }
                 }
+            // If the combo-box is set to collection
             case "collection" -> {
+                // This case will instead use both the CollectionList and MusicList to display songs
+                // Based on the specification by the user (is required to be a whole collection name however)
                 specification = JOptionPane.showInputDialog("Enter collection name to display by");
                 Integer collectionID = collectionList.getCollectionID(specification, userID);
                 displayBySongs = musicList.displayByCollection(specification, userID, collectionID);
@@ -544,18 +599,25 @@ public class PlaylistUI extends javax.swing.JFrame {
     }//GEN-LAST:event_displaySongByBtnActionPerformed
 
     private void createCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createCollectionBtnActionPerformed
+        // listID is set from the text box and parsed as an integer, set from sign in, to help identify the user/list in methods
         String userID = userIDLbl.getText();
         Integer listID = Integer.parseInt(userID);
         
+        // User will be prompted to enter a name for the new collection, which will be checked
         String collectionName = JOptionPane.showInputDialog("Enter Collection Name");
         if(collectionList.checkCollectionName(collectionName, listID) == true){
+            // If the name already exists then a message is displayed
             JOptionPane.showMessageDialog(this, "Collection already exists...");
         } else {
+            // Othersie the collectionID will be set from the returned value in the called method
+            // User will then be prompted for an initial song by an artist to create the collection
+            // Input song information will then be checked that it actually exists
             Integer collectionID = collectionList.getCount();
             String title = JOptionPane.showInputDialog("Enter song name for initial collection");
             if(musicList.checkSongTitle(title, listID) == true){
                 String artist = JOptionPane.showInputDialog("Enter artist name for initial collection");
                 if(musicList.checkArtist(artist, listID) == true){
+                    // If both exist then the collection will be made with a new list song that holds the chosen initial song
                     Song song = musicList.getSongByID(title, artist,listID);
                     collectionList.createCollection(collectionName, collectionID, listID, null, song);
                     JOptionPane.showMessageDialog(this, "New collection made...");
@@ -569,16 +631,22 @@ public class PlaylistUI extends javax.swing.JFrame {
     }//GEN-LAST:event_createCollectionBtnActionPerformed
 
     private void addToCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToCollectionBtnActionPerformed
+        // listID is set from the text box and parsed as an integer, set from sign in, to help identify the user/list in methods
         String userID = userIDLbl.getText();
         Integer listID = Integer.parseInt(userID);
         
+        // User will be prompted to enter the name of the collection they wish to add to, this will be checked to ensure it exists
         String collectionName = JOptionPane.showInputDialog("Enter Collection Name to add to");
         Integer collectionID = collectionList.getCollectionID(collectionName, listID);
         if(collectionList.checkCollectionName(collectionName, listID) == true){
+            // If the collection exists then the user will be prompted to enter a song by an artist into the collection
+            // Usual checks apply
             String title = JOptionPane.showInputDialog("Enter song to add to collection");
             if(musicList.checkSongTitle(title, listID) == true){
                 String artist = JOptionPane.showInputDialog("Enter the songs artist");
                 if(musicList.checkArtist(artist, listID) == true){
+                    // newSongs will get the specified song which will then be passed into the song list in the collection
+                    // A message will then display confirmation
                     Song newSongs = musicList.getSongByID(title, artist, listID);
                     collectionList.addSongToCollection(collectionID, newSongs);
                     JOptionPane.showMessageDialog(this, "Song added to Collection...");
@@ -589,18 +657,25 @@ public class PlaylistUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No song with that title...");
             }
         } else {
+            // If the collection does not exist then a message will be displayed
             JOptionPane.showMessageDialog(this, "No Collection with that name...");
         }
     }//GEN-LAST:event_addToCollectionBtnActionPerformed
 
     private void sortSongByBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortSongByBtnActionPerformed
+        // userID is set from the text box and parsed as an integer, set from sign in, to help identify the user in methods
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // The users combo-box selection will be used to determine how songs are sorted by alongside the sortChoice combo-box(asc or desc) 
+        // A new list is made for displaying the songs
         String sortBy = displayByCB.getSelectedItem().toString();
         String sortChoice = sortByCB.getSelectedItem().toString();
         LinkedList<Song> sortBySongs;
         
+        // This functions incredibly similar to displayBy but lacks user input, instead displaying all songs
+        // How songs are displayed however is determined by the two aforementioned combo-boxes which will use a bubble sort algorithm...
+        // To achieve its function
         if(null != sortBy)switch (sortBy) {
             case "title" -> {
                 sortBySongs = musicList.sortByTitle(sortChoice, userID);
@@ -626,6 +701,7 @@ public class PlaylistUI extends javax.swing.JFrame {
                 songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
                 songsTextArea.setText(songsText);
                 }
+            // Could not get the sort by to work for collections in time
             case "collection" -> JOptionPane.showInputDialog("Currently unavailable...");
 //            sortBySongs = musicList.sortByCollection(sortChoice, userID);
 //            
@@ -638,16 +714,19 @@ public class PlaylistUI extends javax.swing.JFrame {
     }//GEN-LAST:event_sortSongByBtnActionPerformed
 
     private void removeFromCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromCollectionBtnActionPerformed
+        // listID is set from the text box and parsed as an integer, set from sign in, to help identify the user/list in methods
         String userID = userIDLbl.getText();
         Integer listID = Integer.parseInt(userID);
         
-        String collectionName = JOptionPane.showInputDialog("Enter Collection Name to add to");
+        // User will be prompted to enter the name of the collection they wish to remove from, this will be checked to ensure it exists
+        String collectionName = JOptionPane.showInputDialog("Enter Collection Name to remove from");
         Integer collectionID = collectionList.getCollectionID(collectionName, listID);
         if(collectionList.checkCollectionName(collectionName, listID) == true){
-            String title = JOptionPane.showInputDialog("Enter song to add to collection");
+            String title = JOptionPane.showInputDialog("Enter song to remove from collection");
             if(musicList.checkSongTitle(title, listID) == true){
                 String artist = JOptionPane.showInputDialog("Enter the songs artist");
                 if(musicList.checkArtist(artist, listID) == true){
+                    // If the song exists then the songID will be acquired and the song removed from the collection should it be there
                     Integer songID = musicList.getSongID(title, artist, listID);
                     collectionList.removeSongFromCollection(collectionID, songID, listID);
                     JOptionPane.showMessageDialog(this, "Song removed from Collection...");
@@ -658,40 +737,51 @@ public class PlaylistUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No song with that title...");
             }
         } else {
+            // If the collection does not exist then a message will be displayed
             JOptionPane.showMessageDialog(this, "No Collection with that name...");
         }
     }//GEN-LAST:event_removeFromCollectionBtnActionPerformed
 
     private void deleteCollectionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCollectionBtnActionPerformed
+        // listID is set from the text box and parsed as an integer, set from sign in, to help identify the user/list in methods
         String userID = userIDLbl.getText();
         Integer listID = Integer.parseInt(userID);
         
+        // User will be prompted to enter the name of the collection they wish to delete, this will be checked to ensure it exists
         String collectionName = JOptionPane.showInputDialog("Enter Collection Name to Delete");
         Integer collectionID = collectionList.getCollectionID(collectionName, listID);
         if(collectionList.checkCollectionName(collectionName, listID) == true){
+            // If the collection exists then a second prompt will ask for confirmation (yes/no) on deletion
             int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this collection?");
                 if(response == JOptionPane.YES_OPTION){
+                    // Selecting yes will delete the collection and display a message
                     collectionList.deleteCollection(collectionID, listID);
+                    JOptionPane.showMessageDialog(this, "Collection Deleted...");
                 } else if (response == JOptionPane.NO_OPTION){
                     JOptionPane.showMessageDialog(this, "Cancelling Deletion...");
                 }
         } else {
+            // If the collection does not exist then a message will be displayed
             JOptionPane.showMessageDialog(this, "No Collection with that name...");
         }
     }//GEN-LAST:event_deleteCollectionBtnActionPerformed
 
     private void viewUsersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewUsersBtnActionPerformed
+        // username and userID are set from the text boxes, set from sign in, to help identify them in methods
         String username = userNameLbl.getText();
         String ID = userIDLbl.getText();
         Integer userID = Integer.parseInt(ID);
         
+        // When clicked a check is made on the users identity
         if(userList.checkAdmin(username, userID) == true){
+            // If they are an admin then the list of users will be displayed to the text box (username, userID, and admin status)
             LinkedList<User> usersList = userList.displayUsers();
             
             String songsText = "";
             songsText = usersList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
             songsTextArea.setText(songsText);
         } else {
+            // Otherwise a message will notify them that they are not an admin
             JOptionPane.showMessageDialog(this, "Not an admin...");
         }
     }//GEN-LAST:event_viewUsersBtnActionPerformed
