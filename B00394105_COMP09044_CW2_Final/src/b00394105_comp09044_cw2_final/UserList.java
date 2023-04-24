@@ -40,6 +40,18 @@ public class UserList {
         return passwordCorrect;
     }
     
+    public boolean checkAdmin(String username, Integer userID){
+        boolean isAdmin = false;
+        for(int i = 0; i < users.size(); i++){
+            if(users.get(i).username.equals(username) && users.get(i).userID.equals(userID)){
+                if(users.get(i).admin.equals(true)){
+                    isAdmin = true;
+                }
+            }
+        }
+        return isAdmin;
+    }
+    
     public void deleteUser(String username, Integer userID){
         for(int i = 0; i< users.size(); i++){
             if(users.get(i).username.equals(username) && users.get(i).userID.equals(userID)){

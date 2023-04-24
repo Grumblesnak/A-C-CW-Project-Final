@@ -30,6 +30,7 @@ public class PlaylistUI extends javax.swing.JFrame {
         currentIDLbl = new javax.swing.JLabel();
         userNameLbl = new javax.swing.JLabel();
         userIDLbl = new javax.swing.JLabel();
+        viewUsersBtn = new javax.swing.JButton();
         songsPanel = new javax.swing.JPanel();
         addSongBtn = new javax.swing.JButton();
         updateSongBtn = new javax.swing.JButton();
@@ -69,23 +70,36 @@ public class PlaylistUI extends javax.swing.JFrame {
         userIDLbl.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         userIDLbl.setText("[User ID]");
 
+        viewUsersBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        viewUsersBtn.setText("View Users");
+        viewUsersBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewUsersBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
         headerPanel.setLayout(headerPanelLayout);
         headerPanelLayout.setHorizontalGroup(
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerPanelLayout.createSequentialGroup()
-                .addGap(194, 194, 194)
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headerPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(194, 194, 194)
                         .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(currentUserLbl)
-                            .addComponent(currentIDLbl))
-                        .addGap(68, 68, 68)
-                        .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(userIDLbl)
-                            .addComponent(userNameLbl)))
-                    .addComponent(titleLbl))
+                            .addGroup(headerPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(currentUserLbl)
+                                    .addComponent(currentIDLbl))
+                                .addGap(68, 68, 68)
+                                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(userIDLbl)
+                                    .addComponent(userNameLbl)))
+                            .addComponent(titleLbl)))
+                    .addGroup(headerPanelLayout.createSequentialGroup()
+                        .addGap(256, 256, 256)
+                        .addComponent(viewUsersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         headerPanelLayout.setVerticalGroup(
@@ -101,7 +115,9 @@ public class PlaylistUI extends javax.swing.JFrame {
                 .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(currentIDLbl)
                     .addComponent(userIDLbl))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(viewUsersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         songsPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -363,16 +379,20 @@ public class PlaylistUI extends javax.swing.JFrame {
         } else {
             String genre = JOptionPane.showInputDialog("Enter song genre");
             String inputYear = JOptionPane.showInputDialog("Enter song release year");
-            Integer releaseYear = Integer.parseInt(inputYear);
-            
-            musicList.addSong(title, artist, genre, releaseYear, songID, listID);
-            JOptionPane.showMessageDialog(this, "Song Added...");
-            
-            LinkedList<Song> songsList = musicList.displaySongs(listID);
-        
-            String songsText = "";
-            songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
+            if(inputYear.matches("\\d+")){
+                Integer releaseYear = Integer.parseInt(inputYear);
+                
+                musicList.addSong(title, artist, genre, releaseYear, songID, listID);
+                JOptionPane.showMessageDialog(this, "Song Added...");
+
+                LinkedList<Song> songsList = musicList.displaySongs(listID);
+
+                String songsText = "";
+                songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid Year...");
+            }
         }
     }//GEN-LAST:event_addSongBtnActionPerformed
 
@@ -418,16 +438,20 @@ public class PlaylistUI extends javax.swing.JFrame {
                 artist = JOptionPane.showInputDialog("Enter updated artist name");
                 String genre = JOptionPane.showInputDialog("Enter updated song genre");
                 String inputYear = JOptionPane.showInputDialog("Enter updated song release year");
-                Integer releaseYear = Integer.parseInt(inputYear);
+                if(inputYear.matches("\\d+")){
+                    Integer releaseYear = Integer.parseInt(inputYear);
                 
-                musicList.updateSong(title, artist, genre, releaseYear, userID, songID);
-                JOptionPane.showMessageDialog(this, "Song Updated...");
-                
-                LinkedList<Song> songsList = musicList.displaySongs(userID);
+                    musicList.updateSong(title, artist, genre, releaseYear, userID, songID);
+                    JOptionPane.showMessageDialog(this, "Song Updated...");
 
-                String songsText = "";
-                songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-                songsTextArea.setText(songsText);
+                    LinkedList<Song> songsList = musicList.displaySongs(userID);
+
+                    String songsText = "";
+                    songsText = songsList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                    songsTextArea.setText(songsText);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid Year...");
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "No matching artist for that song...");
             }
@@ -472,43 +496,50 @@ public class PlaylistUI extends javax.swing.JFrame {
         String specification;
         LinkedList<Song> displayBySongs;
         
-        if("title".equals(userChoice)){
-            specification = JOptionPane.showInputDialog("Enter song name to display by");
-            displayBySongs = musicList.displayByTitle(specification, userID);
-            
-            String songsText = "";
-            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("artist".equals(userChoice)){
-            specification = JOptionPane.showInputDialog("Enter artist name to display by");
-            displayBySongs = musicList.displayByArtist(specification, userID);
-            
-            String songsText = "";
-            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("genre".equals(userChoice)){
-            specification = JOptionPane.showInputDialog("Enter genre to display by");
-            displayBySongs = musicList.displayByGenre(specification, userID);
-            
-            String songsText = "";
-            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("release year".equals(userChoice)){
-            specification = JOptionPane.showInputDialog("Enter year of release to display by");
-            Integer specifiedYear = Integer.parseInt(specification);
-            displayBySongs = musicList.displayByYear(specifiedYear, userID);
-            
-            String songsText = "";
-            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("collection".equals(userChoice)){
-            specification = JOptionPane.showInputDialog("Enter collection name to display by");
-            Integer collectionID = collectionList.getCollectionID(specification, userID);
-            displayBySongs = musicList.displayByCollection(specification, userID, collectionID);
-            
-            String songsText = "";
-            songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
+        if(null != userChoice)switch (userChoice) {
+            case "title" -> {
+                specification = JOptionPane.showInputDialog("Enter song name to display by");
+                displayBySongs = musicList.displayByTitle(specification, userID);
+                String songsText = "";
+                songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "artist" -> {
+                specification = JOptionPane.showInputDialog("Enter artist name to display by");
+                displayBySongs = musicList.displayByArtist(specification, userID);
+                String songsText = "";
+                songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "genre" -> {
+                specification = JOptionPane.showInputDialog("Enter genre to display by");
+                displayBySongs = musicList.displayByGenre(specification, userID);
+                String songsText = "";
+                songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "release year" -> {
+                specification = JOptionPane.showInputDialog("Enter year of release to display by");
+                if(specification.matches("\\d+")){
+                    Integer specifiedYear = Integer.parseInt(specification);
+                    displayBySongs = musicList.displayByYear(specifiedYear, userID);
+                    String songsText = "";
+                    songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                    songsTextArea.setText(songsText);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid Year...");
+                }
+                }
+            case "collection" -> {
+                specification = JOptionPane.showInputDialog("Enter collection name to display by");
+                Integer collectionID = collectionList.getCollectionID(specification, userID);
+                displayBySongs = musicList.displayByCollection(specification, userID, collectionID);
+                String songsText = "";
+                songsText = displayBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            default -> {
+            }
         }
     }//GEN-LAST:event_displaySongByBtnActionPerformed
 
@@ -570,37 +601,39 @@ public class PlaylistUI extends javax.swing.JFrame {
         String sortChoice = sortByCB.getSelectedItem().toString();
         LinkedList<Song> sortBySongs;
         
-        if("title".equals(sortBy)){
-            sortBySongs = musicList.sortByTitle(sortChoice, userID);
-            
-            String songsText = "";
-            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("artist".equals(sortBy)){
-            sortBySongs = musicList.sortByArtist(sortChoice, userID);
-            
-            String songsText = "";
-            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("genre".equals(sortBy)){
-            sortBySongs = musicList.sortByGenre(sortChoice, userID);
-            
-            String songsText = "";
-            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("release year".equals(sortBy)){
-            sortBySongs = musicList.sortByYear(sortChoice, userID);
-            
-            String songsText = "";
-            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
-            songsTextArea.setText(songsText);
-        } else if("collection".equals(sortBy)){
-            JOptionPane.showInputDialog("Currently unavailable...");
+        if(null != sortBy)switch (sortBy) {
+            case "title" -> {
+                sortBySongs = musicList.sortByTitle(sortChoice, userID);
+                String songsText = "";
+                songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "artist" -> {
+                sortBySongs = musicList.sortByArtist(sortChoice, userID);
+                String songsText = "";
+                songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "genre" -> {
+                sortBySongs = musicList.sortByGenre(sortChoice, userID);
+                String songsText = "";
+                songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "release year" -> {
+                sortBySongs = musicList.sortByYear(sortChoice, userID);
+                String songsText = "";
+                songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+                songsTextArea.setText(songsText);
+                }
+            case "collection" -> JOptionPane.showInputDialog("Currently unavailable...");
 //            sortBySongs = musicList.sortByCollection(sortChoice, userID);
 //            
 //            String songsText = "";
 //            songsText = sortBySongs.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
 //            songsTextArea.setText(songsText);
+            default -> {
+            }
         }
     }//GEN-LAST:event_sortSongByBtnActionPerformed
 
@@ -646,6 +679,22 @@ public class PlaylistUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No Collection with that name...");
         }
     }//GEN-LAST:event_deleteCollectionBtnActionPerformed
+
+    private void viewUsersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewUsersBtnActionPerformed
+        String username = userNameLbl.getText();
+        String ID = userIDLbl.getText();
+        Integer userID = Integer.parseInt(ID);
+        
+        if(userList.checkAdmin(username, userID) == true){
+            LinkedList<User> usersList = userList.displayUsers();
+            
+            String songsText = "";
+            songsText = usersList.stream().map(song -> song.toString() + "\n").reduce(songsText, String::concat);
+            songsTextArea.setText(songsText);
+        } else {
+            JOptionPane.showMessageDialog(this, "Not an admin...");
+        }
+    }//GEN-LAST:event_viewUsersBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -708,5 +757,6 @@ public class PlaylistUI extends javax.swing.JFrame {
     private javax.swing.JButton updateSongBtn;
     public javax.swing.JLabel userIDLbl;
     public javax.swing.JLabel userNameLbl;
+    private javax.swing.JButton viewUsersBtn;
     // End of variables declaration//GEN-END:variables
 }
